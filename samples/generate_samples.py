@@ -99,15 +99,15 @@ with shapefile.Writer(str(base_name), shapeType=shapefile.POLYGON) as w:
     w.field("ZONING", "C", size=20)
     w.field("VALUATION", "N", decimal=2)
 
-    # Plot 1
+    # Plot 1 (Clockwise order for ESRI Shapefile exterior ring)
     w.poly([
-        [[77.5900, 12.9700], [77.5950, 12.9700], [77.5950, 12.9750], [77.5900, 12.9750], [77.5900, 12.9700]]
+        [[77.5900, 12.9700], [77.5900, 12.9750], [77.5950, 12.9750], [77.5950, 12.9700], [77.5900, 12.9700]]
     ])
     w.record("PLOT-101", "Commercial", 5000000.00)
 
-    # Plot 2
+    # Plot 2 (Clockwise order)
     w.poly([
-        [[77.5960, 12.9710], [77.5980, 12.9710], [77.5980, 12.9740], [77.5960, 12.9740], [77.5960, 12.9710]]
+        [[77.5960, 12.9710], [77.5960, 12.9740], [77.5980, 12.9740], [77.5980, 12.9710], [77.5960, 12.9710]]
     ])
     w.record("PLOT-102", "Residential", 3500000.00)
 
