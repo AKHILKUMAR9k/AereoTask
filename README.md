@@ -306,8 +306,8 @@ curl -X GET "http://localhost:8000/api/files/e93f6bd5b630/measurements/" \
 
 ### 1. Clone & Set Up Virtual Environment
 ```bash
-git clone <your-repository-url>
-cd AereoInternTask
+git clone https://github.com/AKHILKUMAR9k/AereoTask.git
+cd AereoTask
 
 # Create virtual environment
 python -m venv .venv
@@ -433,15 +433,10 @@ tests/test_parsers.py::test_invalid_extension_rejection PASSED           [100%]
 
 ---
 
-## 📦 Submission Guide
+## 📦 Repository & Submission
+- **GitHub Repository**: [https://github.com/AKHILKUMAR9k/AereoTask](https://github.com/AKHILKUMAR9k/AereoTask)
 
-1. **Create a Public GitHub Repository**:
-   ```bash
-   git init
-   git add .
-   git commit -m "feat: complete Geospatial File Measurement API"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/geospatial-measurement-api.git
-   git push -u origin main
-   ```
-2. Share the public repository URL as required.
+```bash
+git remote add origin https://github.com/AKHILKUMAR9k/AereoTask.git
+git push -u origin main
+```
