@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Bengaluru Tech Park Survey</name>
+    <description>Ground survey features for testing geospatial file measurement</description>
+    
+    <Placemark>
+      <name>Parcel Alpha (Polygon)</name>
+      <description>Commercial Development Lot</description>
+      <ExtendedData>
+        <Data name="zone"><value>Commercial-IT</value></Data>
+        <Data name="status"><value>Approved</value></Data>
+      </ExtendedData>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              77.5900,12.9700,0
+              77.5950,12.9700,0
+              77.5950,12.9750,0
+              77.5900,12.9750,0
+              77.5900,12.9700,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+
+    <Placemark>
+      <name>Access Road (LineString)</name>
+      <description>Primary arterial roadway connecting north and south gate</description>
+      <ExtendedData>
+        <Data name="lanes"><value>4</value></Data>
+        <Data name="speed_limit"><value>40 km/h</value></Data>
+      </ExtendedData>
+      <LineString>
+        <coordinates>
+          77.5900,12.9700,0
+          77.5925,12.9725,0
+          77.5950,12.9750,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+
+    <Placemark>
+      <name>Survey Benchmark BM-01 (Point)</name>
+      <description>Permanent survey benchmark on granite pillar</description>
+      <ExtendedData>
+        <Data name="elevation_msl"><value>920.45</value></Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>77.5925,12.9725,920.45</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Parcel Beta (Polygon)</name>
+      <description>Recreational Green Park</description>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              77.5960,12.9700,0
+              77.5990,12.9700,0
+              77.5990,12.9730,0
+              77.5960,12.9730,0
+              77.5960,12.9700,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geospatial File Measurement Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="ambient-glow"></div>
+
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+            <line x1="9" y1="3" x2="9" y2="18"></line>
+            <line x1="15" y1="6" x2="15" y2="21"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">GeoMetric API</h1>
+          <p class="brand-sub">Geospatial File Measurement & Reprojection Engine</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="/docs" target="_blank" class="nav-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+          Swagger Docs
+        </a>
+        <a href="/redoc" target="_blank" class="nav-btn secondary">ReDoc</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="upload-section">
+      <div class="card upload-card">
+        <div class="card-header">
+          <h2>Upload Geospatial File</h2>
+          <span class="badge">Supports .zip (Shapefile) & .kml</span>
+        </div>
+
+        <div id="dropZone" class="drop-zone">
+          <input type="file" id="fileInput" accept=".zip,.kml" hidden>
+          <div class="drop-zone-content">
+            <div class="upload-icon-wrapper">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <h3>Drop your geospatial file here or <span class="browse-link">browse</span></h3>
+            <p class="drop-hint">Upload a <strong>Shapefile package (.zip)</strong> or a <strong>Google Earth KML (.kml)</strong> file</p>
+          </div>
+          <div id="uploadProgress" class="progress-bar-wrapper hidden">
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+            <span class="progress-text">Processing and calculating measurements...</span>
+          </div>
+        </div>
+
+        <div class="quick-samples">
+          <span class="samples-label">Quick Test Sample:</span>
+          <button id="btnSampleKml" class="sample-chip">📍 Survey Boundary (KML)</button>
+          <button id="btnSampleShp" class="sample-chip">🗺️ Cadastral Lots (Shapefile ZIP)</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="resultsContainer" class="results-container hidden">
+      <!-- File Metadata Banner -->
+      <section class="metadata-banner card">
+        <div class="banner-grid">
+          <div class="meta-item">
+            <span class="meta-label">File Name</span>
+            <span id="metaFilename" class="meta-value highlight">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">File ID</span>
+            <span id="metaFileId" class="meta-value mono">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Source CRS</span>
+            <span id="metaCrs" class="meta-value badge-crs">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Total Features</span>
+            <span id="metaFeatureCount" class="meta-value">-</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Processing Status</span>
+            <span id="metaStatus" class="status-tag status-success">COMPLETED</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Summary KPI Cards -->
+      <section class="summary-cards">
+        <div class="kpi-card">
+          <div class="kpi-icon icon-area">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total Polygon Area</span>
+            <h3 id="kpiArea">-</h3>
+            <span id="kpiAreaHectares" class="kpi-sub">-</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon icon-length">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total LineString Length</span>
+            <h3 id="kpiLength">-</h3>
+            <span id="kpiLengthKm" class="kpi-sub">-</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon icon-dist">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Geometry Types</span>
+            <div id="kpiDistribution" class="geom-tags">-</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Measurements Table -->
+      <section class="card table-card">
+        <div class="card-header table-header-flex">
+          <div>
+            <h2>Extracted Features & Measurements</h2>
+            <p class="section-sub">Accurate metric projections calculated via local UTM projection</p>
+          </div>
+          <div class="table-actions">
+            <button id="btnCopyJson" class="btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy JSON
+            </button>
+            <a id="btnDownloadGeoJson" href="#" target="_blank" class="btn-sm secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Export GeoJSON
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Projected CRS</th>
+                <th>Measurement</th>
+                <th>Value & Units</th>
+                <th>Attributes / Properties</th>
+              </tr>
+            </thead>
+            <tbody id="measurementsBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>Aereo Geospatial File Measurement API • Developed with FastAPI, Shapely, and PyProj</p>
+      <div class="footer-links">
+        <a href="/api/health" target="_blank">Engine Health</a>
+        <span>•</span>
+        <a href="/docs" target="_blank">OpenAPI Specs</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
